@@ -1,5 +1,5 @@
 import mne
-raw = mne.fiff.Raw('odelia_raw.fif')
+raw=mne.io.Raw('odelia-raw.fif');
 events = mne.find_events(raw, stim_channel='STI 014')
 event_id = 202  # the event number in events
 tmin = -0.25  # start of each epoch (200ms before the trigger)

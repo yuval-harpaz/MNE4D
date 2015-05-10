@@ -1,0 +1,22 @@
+#!/bin/bash
+folder=${PWD##*/}
+if  [ -a ${folder}_raw.fif ]; then
+	echo ${folder}'_raw.fif exists'
+else
+	if [ -a xc,hb,lf_c,rfDC ] ; then 
+		fileName='xc,hb,lf_c,rfDC'
+	elif [ -a xc,lf_c,rfDC ] ; then
+		fileName='xc,lf_c,rfDC'
+	elif [ -a xc,hb,lf_c,rfhp0.1Hz ] ; then
+		fileName='xc,hb,lf_c,rfhp0.1Hz'
+	elif [ -a xc,lf,hb_c,rfhp0.1Hz ] ; then
+		fileName='xc,lf,hb_c,rfhp0.1Hz'
+	elif [ -a xc,lf_c,rfhp0.1Hz ] ; then
+		fileName='xc,lf_c,rfhp0.1Hz'
+	elif [ -a c,rfhp0.1Hz ] ; then
+		fileName='c,rfhp0.1Hz'
+	fi
+	mne_bti2fiff.py -p $fileName -o ${folder}_raw.fif
+fi
+#echo converted $fileName to ${folder}_raw.fif
+

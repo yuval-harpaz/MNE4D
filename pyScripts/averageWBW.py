@@ -3,13 +3,14 @@ import os
 _, folder = os.path.split(os.getcwd())
 
 import mne
-raw=mne.io.Raw('MNE/'+folder+'_raw.fif');
-events = mne.find_events(raw, stim_channel='STI 014')
+raw=mne.io.Raw('MNE/'+folder+'_raw.fif',preload='true');
+raw.filter(1,40)
+events = mne.read_events('MNE/wbw-eve.fif')
 event_id = 2048  # the event number in events
 tmin = -0.5  # start of each epoch (200ms before the trigger)
 tmax = 0.8  # end of each epoch (500ms after the trigget)
 picks = mne.pick_types(raw.info, meg=True, eeg=False, eog=False)
-baseline = (None, 0)
+baseline = (-0.2, 0)
 #reject = dict(mag=4e-12)
 epochs = mne.Epochs(raw, events, event_id, tmin, tmax, proj=True,picks=picks, baseline=baseline, preload=True)
 epochs_data = epochs.get_data()

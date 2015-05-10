@@ -3,7 +3,7 @@ import os
 _, folder = os.path.split(os.getcwd())
 
 import mne
-raw=mne.io.Raw('MNE/'+folder+'_raw.fif');
+raw=mne.io.Raw(folder+'_raw.fif');
 events = mne.find_events(raw, stim_channel='STI 014')
 event_id = 2048  # the event number in events
 tmin = -0.5  # start of each epoch (200ms before the trigger)
@@ -18,10 +18,10 @@ evoked = epochs.average()
 #from mne.viz import plot_evoked
 #plot_evoked(evoked)
 # save
-evoked.save('MNE/'+folder+'_wbw-ave.fif')
+evoked.save(folder+'_wbw-ave.fif')
 # cov
 cov = mne.compute_covariance(epochs, tmin=-0.2, tmax=0)
-cov.save('MNE/'+folder+'_wbw-cov.fif')
+cov.save(folder+'_wbw-cov.fif')
 # below is shell, not python
 # mne_watershed_bem --atlas --overwrite --subject aliceYoni
 # ln -s /usr/local/freesurfer/subjects/aliceYoni/bem/watershed/aliceYoni_inner_skull_surface /usr/local/freesurfer/subjects/aliceYoni/bem/aliceYoni-inner_skull.surf

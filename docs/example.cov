@@ -1,0 +1,19 @@
+cov {
+
+	name		"M100 average"
+	outfile	      	R1841_M100_denoised-cov.fif
+	logfile		R1841_M100_denoised-cov.log
+	eventfile	R1841_M100_denoised.eve
+
+	def { 
+		 	name	"Tone1Khz"
+		 	event	1
+			ignore	0
+		 	tmin	-0.5
+		 	tmax	-.01
+			bmin	-0.5
+			bmax 	-.01
+		 }
+}
+# taken from https://wiki.umd.edu/meglab/images/8/85/R1841_M100_denoised.cov.txt
+# see also here: https://wiki.umd.edu/meglab/index.php?title=MNE

@@ -1,0 +1,22 @@
+#!/bin/bash
+for sub in idan inbal liron maor mark ohad odelia yoni
+	do cd ~/Data/alice
+	cd $sub/MNE
+	strEnd="$(echo ${sub:1})"
+	str1="$(echo `expr substr $sub 1 1`)"
+	str1="$(echo $str1 | tr '[:lower:]' '[:upper:]')"
+	export SUBJECT=alice$str1$strEnd
+	mne_setup_source_space --ico -6 --overwrite
+	mne_setup_forward_model --homog --surf --ico 4 --overwrite
+	mne_do_forward_solution --spacing oct-6 mindist --overwrite --meas ${sub}_raw.fif --megonly --noisecov 
+	mne_do_inverse_operator --fwd ${sub}_raw-oct-6-fwd.fif --deep --loose 0.2 --meg --noisecov ~/Data/emptyRoom/empty-cov.fif
+done
+for sub in idan inbal liron maor mark ohad odelia yoni
+	do cd ~/Data/alice
+	cd $sub/MNE
+	if [ -a ${sub}_raw-oct-6-meg-inv.fif ]; then
+		echo good
+	else
+		echo bad
+	fi
+done

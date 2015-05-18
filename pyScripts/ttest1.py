@@ -9,11 +9,11 @@ subjects = ['idan', 'inbal']
 counter=0
 
 for sub in subjects:
-	#fsSub='alice'+sub[0].upper()+sub[1:]
-	chdir('/home/yuval/Copy/MEGdata/alice/'+sub+'/MNE')
-	stc = read_source_estimate('mne_dSPM_inverse')
-     list_stc[counter]=stc.data
-     counter=counter+1
+    #fsSub='alice'+sub[0].upper()+sub[1:]
+    chdir('/home/yuval/Copy/MEGdata/alice/'+sub+'/MNE')
+    stc = read_source_estimate('mne_dSPM_inverse')
+    list_stc[counter]=stc.data
+    counter=counter+1
 
 
 

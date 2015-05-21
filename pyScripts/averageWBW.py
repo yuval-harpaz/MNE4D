@@ -19,7 +19,7 @@ evoked = epochs.average()
 #from mne.viz import plot_evoked
 #plot_evoked(evoked)
 # save
-evoked.save('MNE/'+folder+'_wbw-ave.fif')
+evoked.save('MNE/'+folder+'_nat-ave.fif')
 # cov
 cov = mne.compute_covariance(epochs, tmin=-0.2, tmax=0)
 cov.save('MNE/'+folder+'_wbw-cov.fif')

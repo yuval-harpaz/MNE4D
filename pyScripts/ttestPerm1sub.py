@@ -11,9 +11,9 @@ from mne import spatial_tris_connectivity, grade_to_tris
 sub='idan'
 #fsSub='alice'+sub[0].upper()+sub[1:]
 chdir('/home/yuval/Copy/MEGdata/alice/'+sub+'/MNE')
-stc = read_source_estimate('mne_dSPM_inverse')
+stc = read_source_estimate('mne_dSPM_fsa')
 
-stc.resample(50)
+stc.resample(50) #50Hz new sampling rate
 n_vertices_fsave, n_times = stc.data.shape
 tstep = stc.tstep
 

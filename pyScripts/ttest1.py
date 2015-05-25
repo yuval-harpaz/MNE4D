@@ -1,3 +1,4 @@
+ # ipython --gui=wx
 from os import chdir
 import os.path
 from termcolor import colored
@@ -5,7 +6,7 @@ from termcolor import colored
 from mne import read_source_estimate
 from scipy.stats import ttest_1samp as ttest
 from surfer import Brain
-
+import numpy as np
 filePref='nat_fsa'
 time0=0.075
 time1=0.125

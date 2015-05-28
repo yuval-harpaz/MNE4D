@@ -20,3 +20,5 @@ for sub in idan inbal liron maor mark ohad odelia yoni
 		echo bad
 	fi
 done
+
+# mne_do_forward_solution --spacing oct-6 mindist --meas idan_raw.fif --megonly --noisecov --fixed --fwd fixed-fwd.fif

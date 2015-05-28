@@ -8,9 +8,9 @@ from scipy.stats import ttest_1samp as ttest
 from surfer import Brain
 import numpy as np
 filePref='nat_fsa'
-time0=0.075
-time1=0.125
-const=4 #ttest_1samp(X,constant)
+time0=0.0875
+time1=0.1125
+const=2 #ttest_1samp(X,constant)
 
 subjects = ['idan', 'inbal', 'liron', 'maor', 'mark', 'ohad', 'odelia', 'yoni'];
 counter=0
@@ -38,15 +38,15 @@ results=ttest(XX,const) # results: row 0 = t, raw 1 = p
 
 posP=results[1]
 posP[np.where(results[0]<=0)]=1
-notSig=np.where(posP<=0.1) # one tailed, positive t only
+notSig=np.where(posP<=0.05) # one tailed, positive t only
 
 posT=results[0]
 posT[notSig]=0
 #posT[np.where(results[0]<0)]=0
 #posT[np.where(results[1]>=0.1)]=0
 brain1 = Brain('fsaverage', 'both', 'pial', views='caudal', subjects_dir = '/usr/local/freesurfer/subjects')
-brain1.add_data(posT[0:10242], colormap='hot', vertices=np.arange(10242), smoothing_steps=1, hemi='lh')
-brain1.add_data(posT[10242:20484], colormap='hot', vertices=np.arange(10242), smoothing_steps=1, hemi='rh')
+brain1.add_data(posT[0:10242], colormap='hot', vertices=np.arange(10242), smoothing_steps=10, hemi='lh')
+brain1.add_data(posT[10242:20484], colormap='hot', vertices=np.arange(10242), smoothing_steps=10, hemi='rh')
 maxT=posT.max()
 brain1.scale_data_colormap(fmin=0, fmid=maxT/2, fmax=maxT, transparent=True)
 

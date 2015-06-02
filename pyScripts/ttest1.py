@@ -1,12 +1,13 @@
- # ipython --gui=wx
+# ipython --gui=wx
 from os import chdir
-import os.path
-from termcolor import colored
-#from surfer.io import read_stc
 from mne import read_source_estimate
 from scipy.stats import ttest_1samp as ttest
 from surfer import Brain
 import numpy as np
+
+%gui
+%gui wx
+
 filePref='nat_fsa'
 time0=0.0875
 time1=0.1125

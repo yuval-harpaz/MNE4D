@@ -11,3 +11,4 @@ done
 mris_preproc --target fsaverage_sym --hemi lh --xhemi --paired-diff --srcsurfreg fsaverage_sym.sphere.reg --meas thickness --out lh.lh-rh.thickness.sm00.mgh --s aliceIdan --s aliceInbal
 
 # open the .mgh file with MRIread in matlab
+

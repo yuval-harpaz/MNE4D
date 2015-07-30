@@ -1,0 +1,13 @@
+# shell script
+# taken from http://surfer.nmr.mgh.harvard.edu/fswiki/Xhemi
+
+for subject in aliceIdan aliceInbal aliceOhad aliceOdelia aliceLiron aliceMark aliceMaor aliceYoni
+    do surfreg --s $subject --xhemi --o xhemiInf --init-reg inflated --t fsaverage_sym --lhrh
+done
+
+
+# make mgh file with all subjects
+# mris_preproc --target fsaverage_sym --hemi lh --xhemi --paired-diff --srcsurfreg fsaverage_sym.sphere.reg --meas thickness --out lh.lh-rh.thickness.sm00.mgh --s aliceIdan --s aliceInbal
+
+# open the .mgh file with MRIread in matlab
+

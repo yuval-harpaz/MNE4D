@@ -1,0 +1,109 @@
+###### installing MNE-2.7.4 on Ubuntu 14.04
+# stuff I had to do to make MNE-2.7.4 and mne-python run on a freshly installed ubuntu 14.04, or upgraded ubuntu 14.04. I also made sure things work on pycharm.
+# here I used MNE-2.7.4-3452-Linux-x86_64, I downloaded it from http://martinos.org/mne/stable/index.html
+# I use git to get repositories, if you don't have git write git in a terminal and get instructions for installation.
+# I installed everything on a user called meg, so in a few places you'll have to replace /home/meg/ with the path to your Home.
+# so we start with having MNE-2.7.4 at ~/ directory.
+
+# change permitions to execute commands
+chmod 777 /home/meg/MNE-2.7.4-3452-Linux-x86_64/bin -R
+
+# get mne-python
+git clone https://github.com/mne-tools/mne-python.git
+
+# I use MNE for 4D-neuroimaging data, I have some scripts for data conversion and processing here
+git clone https://github.com/yuval-harpaz/MNE4D.git
+
+# get stuff to make python, ipython and mne_analyze gui to work
+sudo apt-get install python-pip
+sudo apt-get install python-dev
+sudo apt-get install python-vtk 
+sudo apt-get install libquicktime-dev
+sudo apt-get install libfreetype6-dev
+sudo apt-get install python-wxtools
+sudo pip install joblib
+sudo pip install --upgrade ipython
+sudo ln -s /usr/lib/x86_64-linux-gnu/libgfortran.so.3.0.0 /usr/lib/x86_64-linux-gnu/libgfortran.so.1
+
+# install python packages
+# I am not sure about the --user option
+pip install --user numpy
+pip install --user scipy
+pip install --user matplotlib
+pip install --user mne
+pip install --user mayavi
+pip install --user pysurfer
+pip install --user scikit-learn
+
+# freesurfer is a must get it from their website. change permissions if you have to
+sudo chmod 777 /usr/local/freesurfer/ -R
+
+
+# edit '.bashrc to' have stuff in terminal's path. open it and paste the text below in the end of the file
+# open it
+gedit .bashrc
+# .bashrc should end like this:
+export FREESURFER_HOME=/usr/local/freesurfer
+export SUBJECTS_DIR=/usr/local/freesurfer/subjects
+export PATH=/home/meg/mne-python/mne/commands:$PATH
+export PATH=/home/meg/MNE-2.7.4-3452-Linux-x86_64/bin:$PATH
+export MNE_ROOT=/home/meg/MNE-2.7.4-3452-Linux-x86_64
+source $FREESURFER_HOME/FreeSurferEnv.sh
+source $MNE_ROOT/bin/mne_setup_sh
+# to avoid dirty terminal when opening it you can add these lines to your .bashrc
+sleep 1s
+clear
+# to test stuff you need to open a new terminal or run: source ~/.bashrc
+
+# pycharm
+# pycharm is not necessary, you can open ipython terminal and run mne-python there. If you do want pycharm, get it from the web. I used pycharm-edu-1.0.1
+# these steps have to be taken for pycharm to work well
+sudo apt-get install default-jre
+# I think python is not necessary but I saw this line somewhere and here it is.
+sudo apt-get install python python-tk idle python-pmw python-imaging
+sudo chmod 777 /home/meg/pycharm-edu-1.0.1 -R
+# run pycharm as sudoer and create desktop shortcuts for all users
+sudo /home/meg/pycharm-edu-1.0.1/bin/pycharm.sh
+# Allow parallel processing with pyCharm. this part is risky. if you don't do it you can't use jobs > 1, but take care.
+# open multiprocessing/process.py
+sudo gedit /usr/lib/python2.7/multiprocessing/process.py
+# find in the file 'bootstrap' and change the beginning of it to look like this: (copy this text with the spaces before 'def' until 'try:' and paste it in process from 'def' to first occurance of 'try:').
+    def _bootstrap(self):
+        from . import util
+        global _current_process
+        if not hasattr(sys.stdin, 'close'):
+            def dummy_close():
+                pass
+            sys.stdin.close = dummy_close
+        try:
+
+# run some tests. for 4D data try to convert it to fiff file like this:
+mne_bti2fiff.py -p c,rfDC -o idan_raw.fif
+# this should display a rotating hemisphere
+mne_opengl_test
+# try open mne_analyze gui. if you don't know how it should look see if there are errors in terminal when you open it.
+mne_analyze
+# try freesurfer, if it starts I would ctrl+c it, it can take ours.
+recon-all -all -s idan -i wsMNE/alice/idan/idan.nii
+# if you let it finish try display stuff
+tkmedit idan brainmask.mgz -aux T1.mgz -surfs -aseg
+
+# see you have mne and surfer (pysurfer)
+# in pycharm (or ipython) 
+from mne import morph_data
+import numpy as np
+from surfer import Brain
+%gui
+%gui wx
+# try surfer, see you can turn the brain with your mouse
+brain = Brain('fsaverage', 'both', 'pial', views='caudal', subjects_dir = '/usr/local/freesurfer/subjects')
+brain.add_data(np.arange(10242), colormap='hot', vertices=np.arange(10242), smoothing_steps=10, hemi='lh')
+brain.add_data(np.arange(10242), colormap='hot', vertices=np.arange(10242), smoothing_steps=10, hemi='rh')
+brain.scale_data_colormap(fmin=2000, fmid=8000, fmax=10242, transparent=True)
+
+# try parallel processing on pycharm (more than one job)
+# here I use some stc I have made and morph it to fsaverage
+vertices_to = [np.arange(10242), np.arange(10242)]
+stc_to = morph_data("aliceIdan", "fsaverage", stc, n_jobs=2, grade=vertices_to, subjects_dir="/usr/local/freesurfer/subjects")
+
+

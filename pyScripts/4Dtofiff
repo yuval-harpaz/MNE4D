@@ -3,7 +3,9 @@ folder=${PWD##*/}
 if  [ -a ${folder}_raw.fif ]; then
 	echo ${folder}'_raw.fif exists'
 else
-	if [ -a xc,hb,lf_c,rfDC ] ; then 
+	if [ -a rs,xc,hb,lf_c,rfhp0.1Hz ] ; then
+		fileName='rs,xc,hb,lf_c,rfhp0.1Hz'
+	elif [ -a xc,hb,lf_c,rfDC ] ; then
 		fileName='xc,hb,lf_c,rfDC'
 	elif [ -a xc,lf_c,rfDC ] ; then
 		fileName='xc,lf_c,rfDC'

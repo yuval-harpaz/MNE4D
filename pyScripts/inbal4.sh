@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # 1. convert data
 4D2fiff
 # mne_bti2fiff.py -p rs,xc,hb,lf_c,rfhp0.1Hz -o 4_raw.fif
@@ -22,3 +23,5 @@ mne_setup_source_space --ico -6 --overwrite
 mne_setup_forward_model --homog --surf --ico 4 --overwrite
 mne_do_forward_solution --spacing oct-6 --overwrite --meas 4_raw.fif --megonly --noisecov
 mne_do_inverse_operator --fwd 4_raw-oct-6-fwd.fif --deep --loose 0.2 --meg --noisecov 4AudBL-cov.fif
+
+# from here we go on in python, get back to inbal4.py

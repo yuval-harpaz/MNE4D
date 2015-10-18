@@ -5,11 +5,8 @@ import sys, getopt, struct
 
 __scriptname = sys.argv[0]
 
-__usage = """[-c n] [-l] wtsfile
-Reads SAM .wts files, writes virtual channel weights to stdout (all the
-weights for V0, then V1, etc.). -c n means just output channel Vn. The
-output is preceeded by a line containing the number of weights per channel
-and the number of channels."""
+__usage = """readwts.py [-l] [-c n] file.wts
+The -l option labels each weight with its channel (name or index, depending on the version of the .wts file). The -c option is used to specify a single virtual channel. The default is to print out all of them."""
 
 def printerror(s):
 	sys.stderr.write("%s: %s\n" % (__scriptname, s))

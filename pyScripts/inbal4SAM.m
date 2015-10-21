@@ -24,8 +24,11 @@ BL=zeros(8196,1);
 sourceNorm=zeros(size(source));
 for i=1:8196
     %BL(i)=mean(source(i,102:305));
-    BL(i)=mean(abs(wts(i,:)));
-    sourceNorm(i,:)=source(i,:)./BL(i);
+%     BL(i)=mean(abs(wts(i,:)));
+%     sourceNorm(i,:)=source(i,:)./BL(i);
+    
+    sourceNorm(i,:)=source(i,:)-mean(source(i,102:305));
+    sourceNorm(i,:)=sourceNorm(i,:)./median(abs(sourceNorm(i,:)));
 end
 
 
@@ -66,9 +69,11 @@ parfor pnti=1:8196
     unix(['SAMNwts64 -r 4 -d rs,xc,hb,lf_c,rfhp0.1Hz -m aud -c Aa -t Tetra',num2str(pnti),'.txt -v']);
     [~, ~, NWgts]=readWeights(['4/SAM/aud,Tetra',num2str(pnti),'.txt.wts']);
     Nwts(pnti,:)=NWgts(1,:);
-    disp(['XXXXXXXXX ',num2str(pnti),' XXXXXXXXXXX']);
+    disp(['XXXXXXXXX ',num2str(length(dir('4/SAM/aud,Tetra*.txt.wts'))),' XXXXXXXXXXX']);
 end
 save 4/SAM/Nwts8 Nwts
+!rm 4/SAM/Tetra*.txt
+!rm 4/SAM/aud*.txt.wts
 %%
 cd /home/yuval/Data/inbal
 load 4/SAM/Nwts8
@@ -80,12 +85,18 @@ source=Nwts(:,chanInd)*avg;
 BL=zeros(8196,1);
 sourceNorm=zeros(size(source));
 for i=1:8196
-    %BL(i)=mean(abs(source(i,102:305)));
-    BL(i)=mean(abs(Nwts(i,:)));
-    sourceNorm(i,:)=source(i,:)./BL(i);
+    %BL(i)=abs(mean(source(i,102:305)));
+    %BL(i)=mean(abs(Nwts(i,:)));
+    %sourceNorm(i,:)=source(i,:)./BL(i);
+    
+    sourceNorm(i,:)=source(i,:)-mean(source(i,102:305));
+    sourceNorm(i,:)=sourceNorm(i,:)./median(abs(sourceNorm(i,:)));
 end
-
+vec=abs(mean(sourceNorm(:,380:400),2));
 figure;scatter3pnt(brain,13,abs(mean(sourceNorm(:,380:400),2)))
 figure;scatter3pnt(brain,13,abs(mean(sourceNorm(:,420:450),2)))
 figure;scatter3pnt(brain,13,abs(mean(sourceNorm(:,500:540),2)))
 figure;topoplot248(mean(avg(:,500:540),2),[],1)
+times=importdata('/home/yuval/Data/inbal/4/times.txt');
+ii=6611;
+plot(times,sourceNorm(ii,:))

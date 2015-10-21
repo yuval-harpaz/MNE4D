@@ -25,3 +25,8 @@ mne_do_forward_solution --spacing oct-6 --overwrite --meas 4_raw.fif --megonly -
 mne_do_inverse_operator --fwd 4_raw-oct-6-fwd.fif --deep --loose 0.2 --meg --noisecov 4AudBL-cov.fif
 
 # from here we go on in python, get back to inbal4.py
+
+# for inbal4temp (Colin 27)
+
+mne_do_forward_solution --spacing oct-6 --fwd 4temp --meas 4_raw.fif --megonly --noisecov
+mne_do_inverse_operator --fwd 4temp-fwd.fif --deep --loose 0.2 --meg --noisecov 4AudBL-cov.fif

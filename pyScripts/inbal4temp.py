@@ -2,6 +2,7 @@ __author__ = 'yuval'
 # this is step 5 in Inbal4.py
 import mne
 from os import environ
+from shutil import copyfile
 from get_env_variable import get_env_variable as ge
 # import numpy as np
 # import surfer
@@ -12,9 +13,10 @@ from get_env_variable import get_env_variable as ge
 #   this part can be avoided when running pycharm from terminal or
 #   when running the script from ipython you opened in a terminal
 #   not going through the terminal you must set environment variable according to freesurfer setup
-subjects_dir='/usr/local/freesurfer/subjects'
+
 subject='inbal4temp'
 freesurfer_home="/usr/local/freesurfer"
+subjects_dir=freesurfer_home+"/subjects"
 environ["FREESURFER_HOME"] = freesurfer_home
 mne_bin="/home/yuval/Programs/MNE-2.7.3-3268-Linux-x86_64/bin"
 path=environ['PATH']
@@ -26,37 +28,27 @@ environ['LD_LIBRARY_PATH']=ld_lib
 ###
 # watershed - make BEM model with freesurfer
 ws=mne.bem.make_watershed_bem(subject=subject, subjects_dir=subjects_dir, overwrite=True)
-
+copyfile(subjects_dir+"/"+subject+"/bem/watershed/"+subject+"_inner_skull_surface",subjects_dir+"/"+subject+"/bem/inner_skull.surf")
 
 cd ~/Data/inbal/4temp
 
 # read the data and write as fif
-#rawOld=mne.io.bti.read_raw_bti('rs,xc,hb,lf_c,rfhp0.1Hz')
+
 raw=mne.io.bti.read_raw_bti('rs,xc,hb,lf_c,rfhp0.1Hz',rename_channels=False,sort_by_ch_name=False)
 raw.save('inbal4temp-raw.fif')
-
-# corregistration with MRI
-
-
-
-# command = ['bash', '-c', 'source /usr/local/freesurfer/SetUpFreeSurfer.sh']
-command = ['bash', '-c', 'source ~/.bashrc']
-Popen(command,shell=True)
-command = ['bash', '-c', 'export PATH=$FREESURFER_HOME/bin:$PATH']
-Popen(command,shell=True)
-# export LD_LIBRARY_PATH=$FREESURFER_HOME/lib:$LD_LIBRARY_PATH
-ws=mne.bem.make_watershed_bem(subject=subject, subjects_dir=subjects_dir, overwrite=True)
 
 
 bem_model = mne.make_bem_model(subject=subject, subjects_dir=subjects_dir, conductivity=(0.3,))
 bem_solution = mne.make_bem_solution(bem_model)
 # /usr/local/freesurfer/subjects/aliceIdan/bem
-mne.write_bem_solution('/usr/local/freesurfer/subjects/aliceIdan/bem/aliceIdan-bem.fif',bem_solution)
+mne.write_bem_solution(subjects_dir+"/"+subject+"/bem/"+subject+"-bem.fif",bem_solution)
 
+# check BEM model
+mne.viz.plot_bem(subject='aliceIdan',subjects_dir='/usr/local/freesurfer/subjects', orientation='coronal')
+
+# mark fiducials in the GUI, nudge and save
 mne.gui.coregistration(subject=subject,subjects_dir=subjects_dir,inst='inbal4temp-raw.fif')
 
-
-mne.viz.plot_bem(subject='aliceIdan',subjects_dir='/usr/local/freesurfer/subjects', orientation='coronal')
 
 
 raw=mne.io.read_raw_fif('idan_raw.fif')

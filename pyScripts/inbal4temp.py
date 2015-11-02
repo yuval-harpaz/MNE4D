@@ -4,7 +4,7 @@ import mne
 from os import environ
 from shutil import copyfile
 import surfer
-from get_env_variable import get_env_variable as ge
+# from get_env_variable import get_env_variable as ge
 # import numpy as np
 # import surfer
 # import pickle
@@ -14,7 +14,6 @@ from get_env_variable import get_env_variable as ge
 #   this part can be avoided when running pycharm from terminal or
 #   when running the script from ipython you opened in a terminal
 #   not going through the terminal you must set environment variable according to freesurfer setup
-
 subject='inbal4temp'
 freesurfer_home="/usr/local/freesurfer"
 subjects_dir=freesurfer_home+"/subjects"
@@ -27,6 +26,8 @@ ld_lib=environ['LD_LIBRARY_PATH']
 ld_lib=ld_lib+":"+freesurfer_home+"/lib"
 environ['LD_LIBRARY_PATH']=ld_lib
 ###
+
+
 # watershed - make BEM model with freesurfer
 ws=mne.bem.make_watershed_bem(subject=subject, subjects_dir=subjects_dir, overwrite=True)
 copyfile(subjects_dir+"/"+subject+"/bem/watershed/"+subject+"_inner_skull_surface",subjects_dir+"/"+subject+"/bem/inner_skull.surf")
@@ -103,7 +104,7 @@ brain.scale_data_colormap(fmin=0, fmid=maxval/2, fmax=maxval, transparent=True)
 
 stc.plot(subject=subject,surface='pial',hemi='both',colormap='hot',smoothing_steps=10,transparent=True,subjects_dir=subjects_dir,time_viewer=True)
 
-
+# now with the original brain
 cd ../4/
 subject='inbal4'
 srcOrig = mne.setup_source_space(subject=subject, subjects_dir=subjects_dir, add_dist=False, overwrite=True)
@@ -119,11 +120,6 @@ snr = 3.0
 lambda2 = 1.0 / snr ** 2
 method = "dSPM"
 stcOrig = mne.minimum_norm.apply_inverse(aud, invOrig, lambda2, method, pick_ori=None)
-
-
-# plot the subject's brain with pysurfer
-% gui
-% gui wx
 time=0.092
 tidx = abs(aud.times - time).argmin()
 stcR = stcOrig.rh_data[:,tidx]

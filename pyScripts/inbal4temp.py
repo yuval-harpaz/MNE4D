@@ -4,11 +4,12 @@ from shutil import copyfile
 import surfer
 
 
-# this part is only necessary when running pycharm from louncher
-#  this part can be avoided when running pycharm from terminal or
-#  when running the script from ipython you opened in a terminal
-#  not going through the terminal you must set environment variable
-#  according to freesurfer setup
+# this part is only necessary when running pycharm from louncher,
+# and only for running watershed.# this part can be avoided when
+# running pycharm from terminal or when running the script from
+# ipython you opened in a terminal.
+# not going through the terminal, you must set environment variables
+# according to freesurfer setup.
 subject = 'inbal4temp'
 freesurfer_home = "/usr/local/freesurfer"
 subjects_dir = freesurfer_home + "/subjects"

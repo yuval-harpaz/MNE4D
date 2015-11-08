@@ -11,6 +11,7 @@ import surfer
 # not going through the terminal, you must set environment variables
 # according to freesurfer setup.
 subject = 'inbal4temp'
+environ["subject"] = subject
 freesurfer_home = "/usr/local/freesurfer"
 subjects_dir = freesurfer_home + "/subjects"
 environ["FREESURFER_HOME"] = freesurfer_home

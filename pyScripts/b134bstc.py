@@ -24,7 +24,7 @@ bl_csds = mne.time_frequency.compute_epochs_csd(epochsBL, mode='multitaper', tmi
 stc = mne.beamformer.dics_source_power(epochsHF.info, fwd, bl_csds, hf_csds, pick_ori='normal')
 %gui
 %gui wx
-brain = stc.plot(surface='pial', hemi='both', time_viewer=True, )
+brain = stc.plot(surface='pial', hemi='both', time_viewer=True )
 
 clim = dict(kind='value', lims=[0, 5, 10])
 i=4

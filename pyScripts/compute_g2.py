@@ -1,10 +1,15 @@
-
+# x is a numpy array, raws for channels
 def g2( x ):
-   xbl=x
+   x=x.astype(float)
+   xbl = x.copy()
    for xi in range(0,x.shape[0]):
-      xbl[xi,:]=x[xi,:]-x[xi,:].mean()
-   kur=xbl
-   FIXME - do all the power stuff
+      xbl[xi,:] = x[xi,:]-x[xi,:].mean()
+   x2 = xbl**2
+   x4 = xbl**4
+   sx2 = x2.sum(1)
+   sx4 = x4.sum(1)
+   VAR = sx2/(x.shape[1]-1);
+   kur = sx4/(VAR*VAR*x.shape[1])-3;
    return kur;
 
 
